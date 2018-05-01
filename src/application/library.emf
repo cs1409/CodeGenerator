@@ -1,0 +1,29 @@
+@namespace(uri="http://www.eclipse.org/emf/2002/Ecore", prefix="ecore")
+package application.generatedClasses;
+
+class Vehicle {
+	
+	attr String colour;
+
+}
+
+class Car extends Vehicle {
+	
+	attr int numberOfWheels;
+	ref Person owner;
+	
+}
+
+class Person {
+	
+	attr String name;
+	attr double heightInCm;
+	ref House home;
+}
+
+class House {
+	
+	attr String address;
+	attr int numberOfRooms;
+	
+}

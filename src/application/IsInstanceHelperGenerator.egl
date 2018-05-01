@@ -1,0 +1,24 @@
+package [%=p.name%];
+
+import java.lang.reflect.Type;
+
+// WHEN NEW CLASSES ARE CREATED, ADD THEM TO BOTH METHODS 
+
+public class IsInstanceHelper {
+	
+	public static boolean isInstance(Object value) {
+				
+		boolean isInstance = [%for(c in EClass.all) % {%] value instanceof [%=c.name%] [% if (hasMore) {%] || [%}%] [%}%];
+		
+		return isInstance;
+	}
+	
+	public static boolean isClass(Type attributeType) throws ClassNotFoundException {
+		
+		boolean isClass = [%for(c in EClass.all) % {%] attributeType == [%=c.name%].class [% if (hasMore) {%] || [%}%] [%}%];
+				
+		return isClass;
+	}
+	
+}
+	

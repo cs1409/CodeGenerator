@@ -1,0 +1,126 @@
+[%import "javautil.eol";%]
+
+package [%=c.ePackage.name%];
+
+import runtime.application.*;
+import java.util.ArrayList;
+
+
+public class [%=c.name%] extends [%=c.getJavaExtends()%] {
+
+	[% for (sf in c.eStructuralFeatures.select(sf| sf.isMany)) { %] 
+	private ArrayList<[%= sf.eType.getJavaName()%]> [%=sf.name%] = new ArrayList<[%= sf.eType.getJavaName()%]>();
+	[%}%]
+	[% for (sf in c.eStructuralFeatures.select(sf| not sf.isMany)){ %]
+	private [%= sf.eType.getJavaName() %] [%= sf.name%];
+	[%}%] 
+
+	public [%=c.name%]() {}	
+	
+	public [%=c.name%]([% for (sf in c.eStructuralFeatures) { %] [% if (sf.isMany) {%]ArrayList<[%= sf.eType.getJavaName()%]>[%} else{%][%= sf.eType.getJavaName()%] [%}%] [%=sf.name%][% if (hasMore){%],[%}%] [%}%]) {
+		super();
+		[% for (sf in c.eStructuralFeatures.select(sf| sf.isMany)) { %] 
+		this.[%=sf.name%] = [%=sf.name%];[%}%]		
+		[% for (sf in c.eStructuralFeatures.select(sf| not sf.isMany)) { %] 
+		this.[%=sf.name%] = [%=sf.name%];[%}%]	
+	}
+	
+	[% if (c.eSuperTypes.size() > 0) %{%] 	public [%=c.name%]([% for (sf in c.eStructuralFeatures) { %] [% if (sf.isMany) {%]ArrayList<[%= sf.eType.getJavaName()%]>[%} else{%][%= sf.eType.getJavaName()%] [%}%] [%=sf.name%][% if (hasMore){%],[%}%] [%}%],[% for (stsf in c.eSuperTypes.get(0).eStructuralFeatures) {%][% if (stsf.isMany) {%]ArrayList<[%=stsf.eType.getJavaName()%]> [%} else {%] [%=stsf.eType.getJavaName()%] [%}%] [%=stsf.name%] [%if (hasMore) {%] ,[%}%][%}%]){
+		super([% for (stsf in c.eSuperTypes.get(0).eStructuralFeatures){%] [%=stsf.name%] [%if (hasMore) {%],[%}%] [%}%]);
+		[% for (sf in c.eStructuralFeatures.select(sf| sf.isMany)) { %] 
+		this.[%=sf.name%] = [%=sf.name%];[%}%]		
+		[% for (sf in c.eStructuralFeatures.select(sf| not sf.isMany)) { %] 
+		this.[%=sf.name%] = [%=sf.name%];[%}%]	
+	}[%}%] 
+
+	[% for (sf in c.eStructuralFeatures.select(sf | not sf.isMany)) { %]
+	public [%=sf.eType.getJavaName() %] get[%= sf.name.ftuc() %]() {
+		return this.[%=sf.name%];
+	}
+	
+	[%}%]
+	[% for (sf in c.eStructuralFeatures.select(sf | sf.isMany)) { %]
+	public ArrayList<[%=sf.eType.getJavaName() %]> get[%=sf.name.ftuc() %]() {
+		return this.[%=sf.name%];
+	}
+	
+	[%}%]
+	[% for (a in c.eAttributes.select(a | not a.isMany)) { %]
+	public void set[%=a.name.ftuc() %]([%=a.eType.getJavaName() %] [%=a.name %]) throws Exception {
+		this.[%=a.name%] = [%=a.name%];
+		
+		blockchainWriteRepository.addItem(this, "[%=a.name%]", EventType.SET, [%=a.name%]);
+	} 
+	
+	[%}%]
+	[% for (r in c.eReferences.select(r | not r.isMany)) { %]
+	public void set[%=r.name.ftuc() %]([%=r.eType.getJavaName() %] [%=r.name %]) throws Exception {
+		this.[%=r.name%] = [%=r.name%];
+		
+		blockchainWriteRepository.addItem(this, "[%=r.name%]", EventType.SET, [%=r.name%]);
+	} 
+	
+	 [%}%]
+	[% for (r in c.eReferences.select(r | r.isMany)) { %]
+	public void add[%=r.name.ftuc() %]([%=r.eType.getJavaName() %] [%=r.name %]) throws Exception {
+		this.[%=r.name%].add([%=r.name %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=r.name%]", EventType.ADDTOCOLLECTION, [%=r.name %]);
+	} 
+	
+	[%}%]
+	[% for (r in c.eReferences.select(r | r.isMany)) { %]
+	public void addCollectionOf[%=r.name.ftuc() %](ArrayList<[%=r.eType.getJavaName() %]> collectionOf[%=r.name.ftuc() %]) throws Exception {
+		this.[%=r.name%].addAll(collectionOf[%=r.name.ftuc() %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=r.name%]", EventType.ADDTOCOLLECTION, collectionOf[%=r.name.ftuc() %]);
+	} 
+	
+	[%}%]
+	[% for (r in c.eReferences.select(r | r.isMany)) { %]
+	public void remove[%=r.name.ftuc() %]([%=r.eType.getJavaName() %] [%=r.name %]) throws Exception {
+		this.[%=r.name%].remove([%=r.name %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=r.name%]", EventType.REMOVEFROMCOLLECTION, [%=r.name %]);
+	} 
+	
+	[%}%]
+	[% for (r in c.eReferences.select(r | r.isMany)) { %]
+	public void removeCollectionOf[%=r.name.ftuc() %](ArrayList<[%=r.eType.getJavaName() %]> collectionOf[%=r.name.ftuc() %]) throws Exception {
+		this.[%=r.name%].removeAll(collectionOf[%=r.name.ftuc()%]);
+		
+		blockchainWriteRepository.addItem(this, "[%=r.name%]", EventType.REMOVEFROMCOLLECTION, collectionOf[%=r.name.ftuc()%]);
+	} 
+	
+	[%}%]
+	[% for (a in c.eAttributes.select(a | a.isMany)) { %]
+	public void add[%=a.name.ftuc() %]([%=a.eType.getJavaName() %] [%=a.name %]) throws Exception {
+		this.[%=a.name%].add([%=a.name %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=a.name%]", EventType.ADDTOCOLLECTION, [%=a.name %]);
+	} 
+	
+	[%}%]
+	[% for (a in c.eAttributes.select(a | a.isMany)) { %]
+	public void addCollectionOf[%=a.name.ftuc() %](ArrayList<[%=a.eType.getJavaName() %]> collectionOf[%=a.name.ftuc() %]) throws Exception {
+		this.[%=a.name%].addAll(collectionOf[%=a.name.ftuc() %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=a.name%]", EventType.ADDTOCOLLECTION, collectionOf[%=a.name.ftuc() %]);
+	} 
+	
+	[%}%]
+	[% for (a in c.eAttributes.select(a | a.isMany)) { %]
+	public void remove[%=a.name.ftuc() %]([%=a.eType.getJavaName() %] [%=a.name %]) throws Exception {
+		this.[%=a.name%].remove([%=a.name %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=a.name%]", EventType.REMOVEFROMCOLLECTION, [%=a.name %]);
+	} 
+	
+	[%}%]
+	[% for (a in c.eAttributes.select(a | a.isMany)) { %]
+	public void removeCollectionOf[%=a.name.ftuc() %](ArrayList<[%=a.eType.getJavaName() %]> collectionOf[%=a.name.ftuc() %]) throws Exception {
+		this.[%=a.name%].removeAll(collectionOf[%=a.name.ftuc() %]);
+		
+		blockchainWriteRepository.addItem(this, "[%=a.name%]", EventType.REMOVEFROMCOLLECTION, collectionOf[%=a.name.ftuc() %]);
+	}[%}%]
+}

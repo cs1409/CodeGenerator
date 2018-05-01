@@ -1,0 +1,23 @@
+import "javautil.eol";
+
+rule Class2JavaFile 
+	transform c : EClass {	
+		template : "EClass2Class.egl"		
+		target : "generatedClasses/" + c.name + ".java"
+	}
+	
+rule Class2Method
+	transform p : EPackage {
+		template: "MongoReadRepositoryGenerator.egl"
+		target: "generatedClasses/ReadRepository.java" 
+	}
+	
+
+rule Class2InstanceHelper
+	transform p: EPackage {
+		template: "IsInstanceHelperGenerator.egl"
+		target: "generatedClasses/IsInstanceHelper.java"
+	}
+
+
+	

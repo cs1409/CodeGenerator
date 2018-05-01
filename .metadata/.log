@@ -1,0 +1,31 @@
+!SESSION 2018-03-07 19:35:15.485 -----------------------------------------------
+eclipse.buildId=4.7.2.M20171130-0510
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product -keyring /Users/charliesmith/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -keyring /Users/charliesmith/.eclipse_keyring
+
+!ENTRY org.eclipse.core.net 1 0 2018-03-07 19:35:32.947
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.jface 2 0 2018-03-07 19:35:35.338
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2018-03-07 19:35:35.338
+!MESSAGE A conflict occurred for ALT+SHIFT+E S:
+Binding(ALT+SHIFT+E S,
+	ParameterizedCommand(Command(org.eclipse.eclemma.ui.swtBotJunitShortcut.coverage,Coverage SWTBot Test,
+		Coverage SWTBot Test,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@8f09a02,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+E S,
+	ParameterizedCommand(Command(org.eclipse.epsilon.eunit.dt.commands.rerunsame,Rerun Same Tests,
+		Tests the same operations as in the current EUnit launch,
+		Category(org.eclipse.epsilon.eunit.dt.commands,EUnit,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5454be,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)

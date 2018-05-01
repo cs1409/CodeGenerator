@@ -1,0 +1,107 @@
+[%import "javautil.eol";%]
+package [%=p.name%];
+
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import runtime.application.*;
+
+public class ReadRepository extends MongoDbReadRepository {
+
+public ReadRepository(MongoDatabase db) {
+		super(db);
+	}
+
+	[%for (c in EClass.all) { %]
+	[%for( sf in c.eAttributes.select(sf | not sf.isMany)){ %]
+	public [%=c.name%] get[%=c.name%]By[%=sf.name.ftuc()%]([%=sf.eType.getJavaName()%] [%=sf.name%]) throws IOException {
+	
+		Document document = MongoDbApi.getDocument("[%=c.name%]", "[%=sf.name%]", [%=sf.name%], db);
+		
+		if (document == null) {
+			return null;
+		}
+		
+		resolveReferences(document, db, "[%=c.name%]");
+		
+		@SuppressWarnings("deprecation") // TODO: this is a deprecated method, but should be okay for the project
+		String documentJsonString = com.mongodb.util.JSON.serialize(document);
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		BlockchainWriteRepository.lockWrite();
+
+		try {
+			[%=c.name%] returned[%=c.name%] = mapper.readValue(documentJsonString, [%=c.name%].class);		
+			return returned[%=c.name%];
+		} catch(IOException e ) {
+			throw e;		
+		} finally {
+			BlockchainWriteRepository.unlockWrite();
+		}	
+	}
+	[%}%]
+	
+	[%for( sf in c.eAttributes.select(sf | sf.isMany)){ %]
+	public [%=c.name%] get[%=c.name%]By[%=sf.name.ftuc()%]([%=sf.eType.getJavaName()%] [%=sf.name%]) throws IOException {
+	
+		Document document = MongoDbApi.getDocument("[%=c.name%]", "[%=sf.name%]", [%=sf.name%], db);
+		
+		if (document == null) {
+			return null;
+		}
+		
+		resolveReferences(document, db, "[%=c.name%]");
+		
+		@SuppressWarnings("deprecation") // TODO: this is a deprecated method, but should be okay for the project
+		String documentJsonString = com.mongodb.util.JSON.serialize(document);
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		BlockchainWriteRepository.lockWrite();
+
+		try {
+			[%=c.name%] returned[%=c.name%] = mapper.readValue(documentJsonString, [%=c.name%].class);		
+			return returned[%=c.name%];
+		} catch(IOException e ) {
+			throw e;		
+		} finally {
+			BlockchainWriteRepository.unlockWrite();
+		}	
+	}
+	[%}%]
+	
+	public [%=c.name%] get[%=c.name%]ById(String id) throws IOException {
+	
+		Document document = MongoDbApi.getDocument("[%=c.name%]", "id", id, db);
+		
+		if (document == null) {
+			return null;
+		}
+		
+		resolveReferences(document, db, "[%=c.name%]");
+		
+		@SuppressWarnings("deprecation") // TODO: this is a deprecated method, but should be okay for the project
+		String documentJsonString = com.mongodb.util.JSON.serialize(document);
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		BlockchainWriteRepository.lockWrite();
+
+		try {
+			[%=c.name%] returned[%=c.name%] = mapper.readValue(documentJsonString, [%=c.name%].class);		
+			return returned[%=c.name%];
+		} catch(IOException e ) {
+			throw e;		
+		} finally {
+			BlockchainWriteRepository.unlockWrite();
+		}	
+	}
+	
+	[%}%]
+	 
+	 
+	
+
+}
